@@ -19,6 +19,7 @@ const MapboxMap = () => {
       projection: "globe",
     });
 
+    //search funcationality
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
@@ -26,6 +27,79 @@ const MapboxMap = () => {
 
     map.addControl(geocoder);
 
+    //fullscreen
+    map.addControl(
+      new mapboxgl.FullscreenControl({
+        container: document.querySelector("body"),
+      })
+    );
+
+    //geolocation and finding user below
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+    map.addControl(geolocate);
+    map.on("load", () => {
+      geolocate.trigger();
+    });
+
+    // add image on users location
+
+    // geolocate.on("geolocate", (e) => {
+    //   map.loadImage(
+    //     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png",
+    //     (error, image) => {
+    //       console.log(e);
+    //       if (error) throw error;
+    //       map.addImage("cat", image);
+    //       map.addLayer({
+    //         id: "points",
+    //         type: "symbol",
+    //         source: {
+    //           type: "geojson",
+    //           data: {
+    //             type: "FeatureCollection",
+    //             features: [
+    //               {
+    //                 type: "Feature",
+    //                 geometry: {
+    //                   type: "Point",
+    //                   coordinates: [e.coords.longitude, e.coords.latitude],
+    //                 },
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         layout: {
+    //           "icon-image": "cat",
+    //           "icon-size": 0.3,
+    //         },
+    //       });
+    //     }
+    //   );
+    // });
+
+    // marker placing logic
+
+    const userMarkers = [];
+
+    map.on("click", (e) => {
+      console.log([e.lngLat.lat, e.lngLat.lng]);
+      userMarkers.push(
+        new mapboxgl.Marker({
+          color: "#8458B3",
+          draggable: true,
+        })
+          .setLngLat([e.lngLat.lng, e.lngLat.lat])
+          .addTo(map)
+      );
+    });
+
+    //setting fog and stars on map
     map.on("load", () => {
       map.setFog({
         range: [-1, 2],
