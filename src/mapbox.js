@@ -28,7 +28,7 @@ const MapboxMap = () => {
     return () => map.remove();
   }, []);
 
-  return <div ref={mapContainerRef} style={{ height: "400px" }} />;
+  return <div ref={mapContainerRef} style={{ height: "100vh" }} />;
 };
 
 export default MapboxMap;
