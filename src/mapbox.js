@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import MapboxGeocoder from "mapbox-gl-geocoder";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_PUBLIC_TOKEN;
@@ -98,6 +100,14 @@ const MapboxMap = () => {
           .addTo(map)
       );
     });
+
+    //directions and routes
+    map.addControl(
+      new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+      }),
+      "top-left"
+    );
 
     //setting fog and stars on map
     map.on("load", () => {
